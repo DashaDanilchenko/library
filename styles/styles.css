@@ -25,4 +25,9 @@ td{
 
 table {
     width: 100%;
+    /* cellspacing: "0" */
 }
+.table_content {
+
+}
+
