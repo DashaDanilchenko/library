@@ -1,0 +1,28 @@
+* {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    color:#333333;
+}
+
+.formModal {
+    width: 400px;
+    min-height: 300px;
+    position: absolute;
+    top: calc(50vh - 200px );
+    left: calc(50vw - 200px );
+    border: 1px solid black;
+    padding: 20px;
+}
+.formContext>label {
+    display: block;
+    margin: 10px;
+}
+
+td{
+    border: 1px solid black;
+  }
+
+table {
+    width: 100%;
+}
