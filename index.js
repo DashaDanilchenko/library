@@ -1,3 +1,4 @@
+
 let render = document.querySelector("#render")
 
 const BOOK = 'book'
@@ -39,18 +40,30 @@ function createInfo(arr) {
     return obj
 }
 
-function saveMemory(arrSpend, page) {
-    console.log(arrSpend)
-    localStorage.setItem(`${page}`, JSON.stringify(arrSpend))
+function saveMemory(arrInLocalStorage, page) {
+    localStorage.setItem(`${page}`, JSON.stringify(arrInLocalStorage))
 }
 
-function sendInfo(info, arr, page) {
-    let objectInfo = createInfo(info)
-    arr.push(objectInfo)
-    saveMemory(arr, page)
+function sendInfo(arrData, arrInLocalStorage, page) {
+    let objectInfo = createInfo(arrData)
+    arrInLocalStorage.push(objectInfo)
+    saveMemory(arrInLocalStorage, page)
+    switch (page) {
+        case 'book':
+            renderElement(BOOK, bookData, arrLBooks);
+          break;
+        case 'user':
+            renderElement(USER, userData, arrLUsers);
+          break;
+        case 'card':
+            renderElement(CARD, cardData, arrCards);
+          break;
+        default:
+          alert( "Нет таких значений" );
+      }
 }
 
-function createForm(data, arrIn, page) {
+function createForm(arrData, arrInLocalStorage, page) {
     const formContainer = document.createElement('div')
     formContainer.classList.add('formModal')
     document.body.append(formContainer)
@@ -60,15 +73,16 @@ function createForm(data, arrIn, page) {
     const formCreate = document.createElement('form')
     formCreate.classList.add('formContext')
     formCreate.innerHTML = `${
-        data.map((item) => {
+        arrData.map((item) => {
             return `<label for="${item}">${item}:<input type="text" id="${item}"></label>`
          }).join('')
     }`
     formContainer.append(formCreate)
-    const sendData = document.createElement("div")
+    const sendData = document.createElement("button")
+    sendData.type = "button"
     sendData.innerHTML = 'Send'
     formCreate.append(sendData)
-    sendData.addEventListener('click', (()=> sendInfo(data, arrIn, page)))
+    sendData.addEventListener('click', (()=> sendInfo(arrData, arrInLocalStorage, page)))
     close.addEventListener('click', (()=> deleteForm(formContainer)))
 }
 
@@ -89,13 +103,12 @@ function renderElement(page, arrData, arrInLocalStorage) {
                     <button>Sort</button>
                 </form>
                 <form>
-                    <label for="search_${page}"><input type="text" id="search_${page}></label>
-                    <button>Search</button>
-                </form>
+                <label for="search_${page}"><input type="text" id="search_${page}"></label>
+                <button>Search</button>
+            </form>
             </div>
     `
     render.appendChild(section)
-
 
     switch (page) {
       case 'book':
@@ -111,8 +124,6 @@ function renderElement(page, arrData, arrInLocalStorage) {
         alert( "Нет таких значений" );
     }
 
-
-    createTable()
     let newContent = document.querySelector(`#new_${page}`)
     newContent.addEventListener('click', (()=> createForm(arrData, arrInLocalStorage, page)))
 }
@@ -137,6 +148,9 @@ let storageCard = JSON.parse(localStorage.getItem('card')) || []
 
 
 
+
+renderElement(BOOK, bookData, arrLBooks)
+
 console.log(localStorage)
 // localStorage.clear()
 
@@ -144,7 +158,6 @@ function tableBook() {
     const table = document.querySelector(`.${BOOK}`)
     const tableContent = document.createElement('table')
     tableContent.classList.add('table_content')
-    console.log(storageBooks)
     tableContent.innerHTML = `
     <thead>
         <tr>
@@ -158,7 +171,7 @@ function tableBook() {
         </tr>
     </thead>
     ${       
-        storageBooks.map((table) => {
+        arrLBooks.map((table) => {
         return `<tr>
             <td>${table.id}</td>
             <td>${table.name}</td>
@@ -177,7 +190,6 @@ function tableUser() {
     const table = document.querySelector(`.${USER}`)
     const tableContent = document.createElement('table')
     tableContent.classList.add('table_content')
-    console.log(storageUser)
     tableContent.innerHTML = `
     <thead>
         <tr>
@@ -187,7 +199,7 @@ function tableUser() {
         </tr>
     </thead>
     ${       
-        storageUser.map((table) => {
+        arrLUsers.map((table) => {
         return `<tr>
             <td>${table.id}</td>
             <td>${table.name}</td>
@@ -203,7 +215,6 @@ function tableCard() {
     const table = document.querySelector(`.${CARD}`)
     const tableContent = document.createElement('table')
     tableContent.classList.add('table_content')
-    console.log(storageCard)
     tableContent.innerHTML = `
     <thead>
         <tr>
@@ -214,7 +225,7 @@ function tableCard() {
         </tr>
     </thead>
     ${       
-        storageCard.map((table) => {
+        arrCards.map((table) => {
         return `<tr>
             <td>${table.id}</td>
             <td>${table.nameUser}</td>
@@ -224,4 +235,19 @@ function tableCard() {
         })
     }`
     table.append(tableContent)
+}
+
+if (storageBooks) {
+    arrLBooks = storageBooks 
+    renderElement(BOOK, bookData, arrLBooks)
+}
+
+if (storageUser) {
+    arrLUsers = storageUser 
+    renderElement(USER, userData, arrLUsers)
+}
+
+if (storageCard) {
+    arrCards = storageCard 
+    renderElement(CARD, cardData, arrCards) 
 }
