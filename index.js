@@ -184,13 +184,46 @@ let storageBooks = JSON.parse(localStorage.getItem('book')) || []
 let storageUser = JSON.parse(localStorage.getItem('user')) || []
 let storageCard = JSON.parse(localStorage.getItem('card')) || []
 
-
-
-
 renderElement(BOOK, bookData, arrLBooks)
 
 console.log(localStorage)
 // localStorage.clear()
+
+function deleteBook(book) {
+    arrLBooks = arrLBooks.filter((item) => item.id !== book.id)
+    saveMemory(arrLBooks, BOOK)
+    renderElement(BOOK, bookData, arrLBooks)
+}
+
+function editBook(book) {
+    console.log(book.name)
+}
+
+function renderBooks(book) {
+    const tab = document.createElement('tr')
+    tab.innerHTML = `
+            <td>${book.id}</td>
+            <td>${book.name}</td>
+            <td>${book.nameAuthor}</td>
+            <td>${book.year}</td>
+            <td>${book.numPage}</td>
+            <td>${book.numInLibrary}</td>
+            <td>${book.NamePublishingHouse}</td>
+    `
+
+    const deleteBookBtn = document.createElement('td')
+    deleteBookBtn.innerHTML = '<i class="fa-sharp fa-solid fa-trash"></i>'
+    tab.append(deleteBookBtn)
+    deleteBookBtn.addEventListener('click', () => deleteBook(book))
+
+    const editBookBtn = document.createElement('td')
+    editBookBtn.innerHTML = '<i class="fa-sharp fa-solid fa-pen-to-square"></i>'
+    tab.append(editBookBtn)
+    editBookBtn.addEventListener('click', () => editBook(book))
+
+    return tab
+}
+
 
 function tableBook() {
     const table = document.querySelector(`.${BOOK}`)
@@ -206,23 +239,47 @@ function tableBook() {
         <td>Name publishing house</td>
         <td>Number pages</td>
         <td>Number in the library</td>
+        <td>Delete</td>
+        <td>Edit</td>
         </tr>
-    </thead>
-    ${       
-        arrLBooks.map((table) => {
-        return `<tr>
-            <td>${table.id}</td>
-            <td>${table.name}</td>
-            <td>${table.nameAuthor}</td>
-            <td>${table.year}</td>
-            <td>${table.numPage}</td>
-            <td>${table.numInLibrary}</td>
-            <td>${table.NamePublishingHouse}</td>
-        </tr>`
-        })
-    }`
+    </thead> `
     table.append(tableContent)
+    const books = arrLBooks.map(renderBooks)
+    tableContent.append(...books)
 }
+
+
+function deleteUser(user) {
+    arrLUsers = arrLUsers.filter((item) => item.id !== user.id)
+    saveMemory(arrLUsers, USER)
+    renderElement(USER, userData, arrLUsers)
+}
+
+function editUser(user) {
+    console.log(user.name)
+}
+
+function renderUser(user) {
+    const tab = document.createElement('tr')
+    tab.innerHTML = `
+        <td>${user.id}</td>
+        <td>${user.name}</td>
+        <td>${user.phone}</td>
+    `
+
+    const deleteUserBtn = document.createElement('td')
+    deleteUserBtn.innerHTML = '<i class="fa-sharp fa-solid fa-trash"></i>'
+    tab.append(deleteUserBtn)
+    deleteUserBtn.addEventListener('click', () => deleteUser(user))
+
+    const editUserBtn = document.createElement('td')
+    editUserBtn.innerHTML = '<i class="fa-sharp fa-solid fa-pen-to-square"></i>'
+    tab.append(editUserBtn)
+    editUserBtn.addEventListener('click', () => editUser(user))
+
+    return tab
+}
+
 
 function tableUser() {
     const table = document.querySelector(`.${USER}`)
@@ -234,20 +291,48 @@ function tableUser() {
         <td>ID</td>
         <td>Name</td>
         <td>Phone</td>
+        <td>Delete</td>
+        <td>Edit</td>
         </tr>
-    </thead>
-    ${       
-        arrLUsers.map((table) => {
-        return `<tr>
-            <td>${table.id}</td>
-            <td>${table.name}</td>
-            <td>${table.phone}</td>
-        </tr>`
-        })
-    }`
+    </thead>`
     table.append(tableContent)
+    const users = arrLUsers.map(renderUser)
+    tableContent.append(...users)
 }
 
+// ///////////
+
+function deleteCard(card) {
+    arrCards = arrCards.filter((item) => item.id !== card.id)
+    saveMemory(arrCards, CARD)
+    renderElement(CARD, cardData, arrCards)
+}
+
+function editCard(card) {
+    console.log(card.name)
+}
+
+function renderCard(card) {
+    const tab = document.createElement('tr')
+    tab.innerHTML = `
+        <td>${card.id}</td>
+        <td>${card.nameUser}</td>
+        <td>${card.nameBook}</td>
+        <td>${card.date}</td>
+    `
+
+    const deleteCardBtn = document.createElement('td')
+    deleteCardBtn.innerHTML = '<i class="fa-sharp fa-solid fa-trash"></i>'
+    tab.append(deleteCardBtn)
+    deleteCardBtn.addEventListener('click', () => deleteCard(card))
+
+    const editCardBtn = document.createElement('td')
+    editCardBtn.innerHTML = '<i class="fa-sharp fa-solid fa-pen-to-square"></i>'
+    tab.append(editCardBtn)
+    editCardBtn.addEventListener('click', () => editCard(card))
+
+    return tab
+}
 
 function tableCard() {
     const table = document.querySelector(`.${CARD}`)
@@ -261,24 +346,13 @@ function tableCard() {
         <td>Name book</td>
         <td>Date</td>
         </tr>
-    </thead>
-    ${       
-        arrCards.map((table) => {
-        return `<tr>
-            <td>${table.id}</td>
-            <td>${table.nameUser}</td>
-            <td>${table.nameBook}</td>
-            <td>${table.date}</td>
-        </tr>`
-        })
-    }`
+    </thead>`
     table.append(tableContent)
+    const cards = arrCards.map(renderCard)
+    tableContent.append(...cards)
 }
 
-if (storageBooks) {
-    arrLBooks = storageBooks 
-    renderElement(BOOK, bookData, arrLBooks)
-}
+
 
 if (storageUser) {
     arrLUsers = storageUser 
@@ -288,4 +362,9 @@ if (storageUser) {
 if (storageCard) {
     arrCards = storageCard 
     renderElement(CARD, cardData, arrCards) 
+}
+
+if (storageBooks) {
+    arrLBooks = storageBooks 
+    renderElement(BOOK, bookData, arrLBooks)
 }
