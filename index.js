@@ -15,7 +15,8 @@ let arrLUsers = []
 const cardData = ['nameUser', 'nameBook', 'date']
 let arrCards = []
 
-
+const dataSelectBook = []
+const dataSelectUser = []
 
 function str_gen(num) {
     allStr = '123456789';
@@ -59,8 +60,41 @@ function sendInfo(arrData, arrInLocalStorage, page) {
             renderElement(CARD, cardData, arrCards);
           break;
         default:
-          alert( "Нет таких значений" );
+          console.log(10);
       }
+}
+
+function collectData() {
+    arrLBooks.forEach(book => {
+        dataSelectBook.push(book.name)
+    });
+    arrLUsers.forEach(user => {
+        dataSelectUser.push(user.name)
+    });
+}
+
+
+function selectorCard(formCreate) {
+    collectData()
+    return formCreate.innerHTML = 
+    `<label for="nameUser">nameUser: <select id="nameUser">
+    ${       
+        dataSelectUser.map((item) => {
+            return `<option>${item}</option>`
+         }).join('')
+    }       
+        </select>
+    </label>
+    <label for="nameBook">nameBook: <select id="nameBook">
+    ${       
+        dataSelectBook.map((item) => {
+            return `<option>${item}</option>`
+         }).join('')
+    }       
+        </select>
+    </label>
+    <label for="date">date:<input type="text" id="date"></label>`
+
 }
 
 function createForm(arrData, arrInLocalStorage, page) {
@@ -72,11 +106,15 @@ function createForm(arrData, arrInLocalStorage, page) {
     formContainer.append(close)
     const formCreate = document.createElement('form')
     formCreate.classList.add('formContext')
-    formCreate.innerHTML = `${
-        arrData.map((item) => {
-            return `<label for="${item}">${item}:<input type="text" id="${item}"></label>`
-         }).join('')
-    }`
+    if (page === 'card') {
+        selectorCard(formCreate)
+    } else {
+        formCreate.innerHTML = `${
+            arrData.map((item) => {
+                return `<label for="${item}">${item}:<input type="text" id="${item}"></label>`
+             }).join('')
+        }`
+    }
     formContainer.append(formCreate)
     const sendData = document.createElement("button")
     sendData.type = "button"
@@ -121,7 +159,7 @@ function renderElement(page, arrData, arrInLocalStorage) {
         tableCard();
         break;
       default:
-        alert( "Нет таких значений" );
+        console.log(10);
     }
 
     let newContent = document.querySelector(`#new_${page}`)
@@ -166,8 +204,8 @@ function tableBook() {
         <td>Name author</td>
         <td>Year publication</td>
         <td>Name publishing house</td>
-        <td>number pages</td>
-        <td>number in the library</td>
+        <td>Number pages</td>
+        <td>Number in the library</td>
         </tr>
     </thead>
     ${       
@@ -195,7 +233,7 @@ function tableUser() {
         <tr>
         <td>ID</td>
         <td>Name</td>
-        <td>phone</td>
+        <td>Phone</td>
         </tr>
     </thead>
     ${       
