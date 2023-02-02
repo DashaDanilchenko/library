@@ -81,7 +81,7 @@ function selectorCard(formCreate, nameUser='', nameBook='', date='') {
     ${       
         dataSelectUser.map((item) => {
             return item === nameUser
-            ?`<option>${nameUser}</option>`
+            ?`<option selected=“selected”>${item}</option>`
             :`<option>${item}</option>`
          }).join('')
     }       
@@ -91,7 +91,7 @@ function selectorCard(formCreate, nameUser='', nameBook='', date='') {
     ${       
         dataSelectBook.map((item) => {
             return item === nameBook
-            ?`<option>${nameBook}</option>`
+            ?`<option selected=“selected”>${item}</option>`
             :`<option>${item}</option>`
          }).join('')
     }       
@@ -194,6 +194,8 @@ console.log(localStorage)
 // localStorage.clear()
 
 
+// -------BOOK-----------
+
 function editBook(book) {
     arrLBooks = arrLBooks.map((item) => {
     return item.id === book.id
@@ -295,7 +297,7 @@ function tableBook() {
     tableContent.append(...books)
 }
 
-///////////////////////
+// -------USER-----------
 
 
 function editUser(user) {
@@ -384,7 +386,7 @@ function tableUser() {
     tableContent.append(...users)
 }
 
-// /////////////////////////
+// -------CARD-----------
 
 
 function editCard(card) {
@@ -412,11 +414,6 @@ function editFormCard(card) {
     const formCreate = document.createElement('form')
     formCreate.classList.add('formContext')
     selectorCard(formCreate, card.nameUser, card.nameBook, card.date)
-    // formCreate.innerHTML = 
-    //     `<label for="nameUser">nameUser:<input type="text" id="nameUser" value=${card.nameUser}></label>
-    //     <label for="nameBook">nameBook:<input type="text" id="nameBook" value=${card.nameBook}></label>
-    //     <label for="date">date:<input type="text" id="date" value=${card.date}></label>`
-
     formContainer.append(formCreate)
     const sendData = document.createElement("button")
     sendData.type = "button"
