@@ -74,13 +74,15 @@ function collectData() {
 }
 
 
-function selectorCard(formCreate) {
+function selectorCard(formCreate, nameUser='', nameBook='', date='') {
     collectData()
     return formCreate.innerHTML = 
     `<label for="nameUser">nameUser: <select id="nameUser">
     ${       
         dataSelectUser.map((item) => {
-            return `<option>${item}</option>`
+            return item === nameUser
+            ?`<option>${nameUser}</option>`
+            :`<option>${item}</option>`
          }).join('')
     }       
         </select>
@@ -88,12 +90,14 @@ function selectorCard(formCreate) {
     <label for="nameBook">nameBook: <select id="nameBook">
     ${       
         dataSelectBook.map((item) => {
-            return `<option>${item}</option>`
+            return item === nameBook
+            ?`<option>${nameBook}</option>`
+            :`<option>${item}</option>`
          }).join('')
     }       
         </select>
     </label>
-    <label for="date">date:<input type="text" id="date"></label>`
+    <label for="date">date:<input type="text" id="date" value=${date}></label>`
 
 }
 
@@ -150,7 +154,7 @@ function renderElement(page, arrData, arrInLocalStorage) {
 
     switch (page) {
       case 'book':
-        tableBook();
+        tableBook()
         break;
       case 'user':
         tableUser();
@@ -189,15 +193,58 @@ renderElement(BOOK, bookData, arrLBooks)
 console.log(localStorage)
 // localStorage.clear()
 
+
+function editBook(book) {
+    arrLBooks = arrLBooks.map((item) => {
+    return item.id === book.id
+    ? {...item,
+        name: document.querySelector('#name').value,
+        nameAuthor: document.querySelector('#nameAuthor').value,
+        year: document.querySelector('#year').value,
+        numPage: document.querySelector('#numPage').value,
+        numInLibrary: document.querySelector('#numInLibrary').value,
+        NamePublishingHouse: document.querySelector('#NamePublishingHouse').value,}
+    : {... item}
+   })
+    saveMemory(arrLBooks, BOOK)
+    renderElement(BOOK, bookData, arrLBooks)
+}
+
+
+function editFormBook(book) {
+    const formContainer = document.createElement('div')
+    formContainer.classList.add('formModal')
+    document.body.append(formContainer)
+    const close = document.createElement('div')
+    close.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>'
+    formContainer.append(close)
+    const formCreate = document.createElement('form')
+    formCreate.classList.add('formContext')
+   
+    formCreate.innerHTML = 
+        `<label for="name">name:<input type="text" id="name" value=${book.name}></label>
+        <label for="nameAuthor">nameAuthor:<input type="text" id="nameAuthor" value=${book.nameAuthor}></label>
+        <label for="year">year:<input type="text" id="year" value=${book.year}></label>
+        <label for="numPage">numPage:<input type="text" id="numPage" value=${book.numPage}></label>
+        <label for="numInLibrary">numInLibrary:<input type="text" id="numInLibrary" value=${book.numInLibrary}></label>
+        <label for="NamePublishingHouse">NamePublishingHouse:<input type="text" id="NamePublishingHouse" value=${book.NamePublishingHouse}></label>`
+
+    formContainer.append(formCreate)
+    const sendData = document.createElement("button")
+    sendData.type = "button"
+    sendData.innerHTML = 'Send'
+    formCreate.append(sendData)
+    sendData.addEventListener('click', (()=> editBook(book)))
+    close.addEventListener('click', (()=> deleteForm(formContainer)))
+}
+
+
 function deleteBook(book) {
     arrLBooks = arrLBooks.filter((item) => item.id !== book.id)
     saveMemory(arrLBooks, BOOK)
     renderElement(BOOK, bookData, arrLBooks)
 }
 
-function editBook(book) {
-    console.log(book.name)
-}
 
 function renderBooks(book) {
     const tab = document.createElement('tr')
@@ -219,7 +266,7 @@ function renderBooks(book) {
     const editBookBtn = document.createElement('td')
     editBookBtn.innerHTML = '<i class="fa-sharp fa-solid fa-pen-to-square"></i>'
     tab.append(editBookBtn)
-    editBookBtn.addEventListener('click', () => editBook(book))
+    editBookBtn.addEventListener('click', () => editFormBook(book))
 
     return tab
 }
@@ -248,15 +295,52 @@ function tableBook() {
     tableContent.append(...books)
 }
 
+///////////////////////
+
+
+function editUser(user) {
+    arrLUsers = arrLUsers.map((item) => {
+    return item.id === user.id
+    ? {...item,
+        name: document.querySelector('#name').value,
+        phone: document.querySelector('#phone').value,
+    }
+    : {... item}
+   })
+    saveMemory(arrLUsers, USER)
+    renderElement(USER, userData, arrLUsers)
+}
+
+
+function editFormUser(user) {
+    const formContainer = document.createElement('div')
+    formContainer.classList.add('formModal')
+    document.body.append(formContainer)
+    const close = document.createElement('div')
+    close.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>'
+    formContainer.append(close)
+    const formCreate = document.createElement('form')
+    formCreate.classList.add('formContext')
+   
+    formCreate.innerHTML = 
+        `<label for="name">name:<input type="text" id="name" value=${user.name}></label>
+        <label for="phone">phone:<input type="text" id="phone" value=${user.phone}></label>`
+
+    formContainer.append(formCreate)
+    const sendData = document.createElement("button")
+    sendData.type = "button"
+    sendData.innerHTML = 'Send'
+    formCreate.append(sendData)
+    sendData.addEventListener('click', (()=> editUser(user)))
+    close.addEventListener('click', (()=> deleteForm(formContainer)))
+}
+
+
 
 function deleteUser(user) {
     arrLUsers = arrLUsers.filter((item) => item.id !== user.id)
     saveMemory(arrLUsers, USER)
     renderElement(USER, userData, arrLUsers)
-}
-
-function editUser(user) {
-    console.log(user.name)
 }
 
 function renderUser(user) {
@@ -275,7 +359,7 @@ function renderUser(user) {
     const editUserBtn = document.createElement('td')
     editUserBtn.innerHTML = '<i class="fa-sharp fa-solid fa-pen-to-square"></i>'
     tab.append(editUserBtn)
-    editUserBtn.addEventListener('click', () => editUser(user))
+    editUserBtn.addEventListener('click', () => editFormUser(user))
 
     return tab
 }
@@ -300,7 +384,47 @@ function tableUser() {
     tableContent.append(...users)
 }
 
-// ///////////
+// /////////////////////////
+
+
+function editCard(card) {
+    arrCards = arrCards.map((item) => {
+    return item.id === card.id
+    ? {...item,
+        nameUser: document.querySelector('#nameUser').value,
+        nameBook: document.querySelector('#nameBook').value,
+        date: document.querySelector('#date').value,
+    }
+    : {... item}
+   })
+    saveMemory(arrCards, CARD)
+    renderElement(CARD, cardData, arrCards)
+}
+
+
+function editFormCard(card) {
+    const formContainer = document.createElement('div')
+    formContainer.classList.add('formModal')
+    document.body.append(formContainer)
+    const close = document.createElement('div')
+    close.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>'
+    formContainer.append(close)
+    const formCreate = document.createElement('form')
+    formCreate.classList.add('formContext')
+    selectorCard(formCreate, card.nameUser, card.nameBook, card.date)
+    // formCreate.innerHTML = 
+    //     `<label for="nameUser">nameUser:<input type="text" id="nameUser" value=${card.nameUser}></label>
+    //     <label for="nameBook">nameBook:<input type="text" id="nameBook" value=${card.nameBook}></label>
+    //     <label for="date">date:<input type="text" id="date" value=${card.date}></label>`
+
+    formContainer.append(formCreate)
+    const sendData = document.createElement("button")
+    sendData.type = "button"
+    sendData.innerHTML = 'Send'
+    formCreate.append(sendData)
+    sendData.addEventListener('click', (()=> editCard(card)))
+    close.addEventListener('click', (()=> deleteForm(formContainer)))
+}
 
 function deleteCard(card) {
     arrCards = arrCards.filter((item) => item.id !== card.id)
@@ -308,9 +432,6 @@ function deleteCard(card) {
     renderElement(CARD, cardData, arrCards)
 }
 
-function editCard(card) {
-    console.log(card.name)
-}
 
 function renderCard(card) {
     const tab = document.createElement('tr')
@@ -329,7 +450,7 @@ function renderCard(card) {
     const editCardBtn = document.createElement('td')
     editCardBtn.innerHTML = '<i class="fa-sharp fa-solid fa-pen-to-square"></i>'
     tab.append(editCardBtn)
-    editCardBtn.addEventListener('click', () => editCard(card))
+    editCardBtn.addEventListener('click', () => editFormCard(card))
 
     return tab
 }
@@ -345,6 +466,8 @@ function tableCard() {
         <td>Name</td>
         <td>Name book</td>
         <td>Date</td>
+        <td>Delete</td>
+        <td>Edit</td>
         </tr>
     </thead>`
     table.append(tableContent)
