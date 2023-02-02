@@ -403,6 +403,14 @@ function editCard(card) {
     renderElement(CARD, cardData, arrCards)
 }
 
+function returnBookInLibrary () {
+
+    const date = document.querySelector('#date')
+
+    date.value = '<i class="fa-solid fa-reply"></i>'
+
+}
+
 
 function editFormCard(card) {
     const formContainer = document.createElement('div')
@@ -415,10 +423,19 @@ function editFormCard(card) {
     formCreate.classList.add('formContext')
     selectorCard(formCreate, card.nameUser, card.nameBook, card.date)
     formContainer.append(formCreate)
+
+    const returnBook = document.createElement("button")
+    returnBook.type = "button"
+    returnBook.innerHTML = 'The book is returned'
+
     const sendData = document.createElement("button")
     sendData.type = "button"
     sendData.innerHTML = 'Send'
+
+    formCreate.append(returnBook)
     formCreate.append(sendData)
+
+    returnBook.addEventListener('click', (()=> returnBookInLibrary()))
     sendData.addEventListener('click', (()=> editCard(card)))
     close.addEventListener('click', (()=> deleteForm(formContainer)))
 }
