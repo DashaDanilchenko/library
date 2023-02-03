@@ -128,6 +128,44 @@ function createForm(arrData, arrInLocalStorage, page) {
     close.addEventListener('click', (()=> deleteForm(formContainer)))
 }
 
+function searchTable(page) {
+    switch (page) {
+        case 'book':
+          tableBook()
+          break;
+        case 'user':
+          tableUser();
+          break;
+        case 'card':
+          tableCard();
+          break;
+        default:
+          console.log(10);
+      }
+}
+
+function sortArr(sortData, arr, page) {
+    function compare (a, b) {
+        if (a[`${sortData}`] > b[`${sortData}`]) {
+            return 1;
+          }
+          if (a[`${sortData}`] < b[`${sortData}`]) {
+            return -1;
+          }
+            return 0;
+      }
+    const tableContent = document.querySelector('.table_content')
+    tableContent.innerHTML = ''
+
+    arr.sort(compare) 
+
+    searchTable(page)
+}
+
+function searchArr(searchDate, arr, page) {
+    console.log(searchDate, arr, page)
+}
+
 
 function renderElement(page, arrData, arrInLocalStorage) {
     render.innerHTML = ""
@@ -141,30 +179,36 @@ function renderElement(page, arrData, arrInLocalStorage) {
             <hr>
             <div class="forms">
                 <form>
-                    <label for="sort_${page}"><input type="text" id="sort_${page}"></label>
-                    <button>Sort</button>
+                    <label for="sort_${page}"><select id="sort_${page}">
+                    <option></option>   
+                    <option>id</option>
+                    ${       
+                        arrData.map((item) => {   
+                           return `<option>${item}</option>`
+                         })
+                    }  
+                    </select></label>
+                    <button id="sort_${page}_btn">Sort</button>
                 </form>
                 <form>
                 <label for="search_${page}"><input type="text" id="search_${page}"></label>
-                <button>Search</button>
+                <button id="search_${page}_btn">Search</button>
             </form>
             </div>
     `
     render.appendChild(section)
 
-    switch (page) {
-      case 'book':
-        tableBook()
-        break;
-      case 'user':
-        tableUser();
-        break;
-      case 'card':
-        tableCard();
-        break;
-      default:
-        console.log(10);
-    }
+    const sortBtn = document.querySelector(`#sort_${page}_btn`)
+    sortBtn.type = 'button'
+    const sort = document.querySelector(`#sort_${page}`)
+    sortBtn.addEventListener('click', (() => sortArr(sort.value, arrInLocalStorage, page)))
+
+    const searchBtn = document.querySelector(`#search_${page}_btn`)
+    searchBtn.type = 'button'
+    const search = document.querySelector(`#search_${page}`)
+    searchBtn.addEventListener('click', (() => searchArr(search.value, arrInLocalStorage, page)))
+
+    searchTable(page)
 
     let newContent = document.querySelector(`#new_${page}`)
     newContent.addEventListener('click', (()=> createForm(arrData, arrInLocalStorage, page)))
