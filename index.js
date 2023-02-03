@@ -65,6 +65,8 @@ function sendInfo(arrData, arrInLocalStorage, page) {
 }
 
 function collectData() {
+    dataSelectBook = []
+    dataSelectUser = []
     arrLBooks.forEach(book => {
         dataSelectBook.push(book.name)
     });
@@ -128,16 +130,16 @@ function createForm(arrData, arrInLocalStorage, page) {
     close.addEventListener('click', (()=> deleteForm(formContainer)))
 }
 
-function searchTable(page) {
+function searchTable(page, arr) {
     switch (page) {
         case 'book':
-          tableBook()
+          tableBook(arr)
           break;
         case 'user':
-          tableUser();
+          tableUser(arr);
           break;
         case 'card':
-          tableCard();
+          tableCard(arr);
           break;
         default:
           console.log(10);
@@ -145,6 +147,8 @@ function searchTable(page) {
 }
 
 function sortArr(sortData, arr, page) {
+    const tableContent = document.querySelector('.table_content')
+    tableContent.innerHTML = ''
     function compare (a, b) {
         if (a[`${sortData}`] > b[`${sortData}`]) {
             return 1;
@@ -154,16 +158,31 @@ function sortArr(sortData, arr, page) {
           }
             return 0;
       }
-    const tableContent = document.querySelector('.table_content')
-    tableContent.innerHTML = ''
-
     arr.sort(compare) 
 
-    searchTable(page)
+    searchTable(page, arr)
 }
 
-function searchArr(searchDate, arr, page) {
-    console.log(searchDate, arr, page)
+function searchArr(searchDate, arr, page, keySearch) {
+    switch (page) {
+        case 'book':
+            keySearch = 'name';
+          break;
+        case 'user':
+            keySearch = 'name';
+          break;
+        case 'card':
+            keySearch = 'nameUser';
+          break;
+        default:
+          console.log(10);
+      }
+    arr.forEach((i) => console.log(i[`${keySearch}`]))
+    const tableContent = document.querySelector('.table_content')
+    tableContent.innerHTML = ''
+    let arrSearch = arr.filter((item) => (item[`${keySearch}`].toLowerCase()).includes((`${searchDate}`.toLowerCase()))) || []
+    console.log(arrSearch)
+    searchTable(page, arrSearch) 
 }
 
 
@@ -208,7 +227,7 @@ function renderElement(page, arrData, arrInLocalStorage) {
     const search = document.querySelector(`#search_${page}`)
     searchBtn.addEventListener('click', (() => searchArr(search.value, arrInLocalStorage, page)))
 
-    searchTable(page)
+    searchTable(page, arrInLocalStorage)
 
     let newContent = document.querySelector(`#new_${page}`)
     newContent.addEventListener('click', (()=> createForm(arrData, arrInLocalStorage, page)))
@@ -318,7 +337,7 @@ function renderBooks(book) {
 }
 
 
-function tableBook() {
+function tableBook(arr) {
     const table = document.querySelector(`.${BOOK}`)
     const tableContent = document.createElement('table')
     tableContent.classList.add('table_content')
@@ -337,7 +356,7 @@ function tableBook() {
         </tr>
     </thead> `
     table.append(tableContent)
-    const books = arrLBooks.map(renderBooks)
+    const books = arr.map(renderBooks)
     tableContent.append(...books)
 }
 
@@ -411,7 +430,7 @@ function renderUser(user) {
 }
 
 
-function tableUser() {
+function tableUser(arr) {
     const table = document.querySelector(`.${USER}`)
     const tableContent = document.createElement('table')
     tableContent.classList.add('table_content')
@@ -426,7 +445,7 @@ function tableUser() {
         </tr>
     </thead>`
     table.append(tableContent)
-    const users = arrLUsers.map(renderUser)
+    const users = arr.map(renderUser)
     tableContent.append(...users)
 }
 
@@ -513,7 +532,7 @@ function renderCard(card) {
     return tab
 }
 
-function tableCard() {
+function tableCard(arr) {
     const table = document.querySelector(`.${CARD}`)
     const tableContent = document.createElement('table')
     tableContent.classList.add('table_content')
@@ -529,7 +548,7 @@ function tableCard() {
         </tr>
     </thead>`
     table.append(tableContent)
-    const cards = arrCards.map(renderCard)
+    const cards = arr.map(renderCard)
     tableContent.append(...cards)
 }
 
