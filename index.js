@@ -142,25 +142,28 @@ function createForm(arrData, arrInLocalStorage, page) {
     close.addEventListener('click', (()=> deleteForm(formContainer)))
 }
 
-function searchTable(page, arr) {
+function searchTable(page, arr, tableContent) {
+    if (tableContent) {
+        tableContent.innerHTML = ''
+    }
     switch (page) {
         case 'book':
-          tableBook(arr)
+          tableBook(arr, tableContent)
           break;
         case 'user':
-          tableUser(arr);
+          tableUser(arr, tableContent);
           break;
         case 'card':
-          tableCard(arr);
+          tableCard(arr, tableContent);
           break;
         default:
           console.log(10);
       }
 }
 
-function sortArr(sortData, arr, page) {
-    const tableContent = document.querySelector('.table_content')
-    tableContent.innerHTML = ''
+function sortArr(sortData, arr, page, tableContent) {
+    // const tableContent = document.querySelector('.table_content')
+    // tableContent.innerHTML = ''
     function compare (a, b) {
         if (a[`${sortData}`] > b[`${sortData}`]) {
             return 1;
@@ -172,10 +175,11 @@ function sortArr(sortData, arr, page) {
       }
     arr.sort(compare) 
 
-    searchTable(page, arr)
+    searchTable(page, arr, tableContent)
 }
 
-function searchArr(searchDate, arr, page, keySearch) {
+function searchArr(searchDate, arr, page , tableContent) {
+    let keySearch
     switch (page) {
         case 'book':
             keySearch = 'name';
@@ -190,11 +194,11 @@ function searchArr(searchDate, arr, page, keySearch) {
           console.log(10);
       }
     arr.forEach((i) => console.log(i[`${keySearch}`]))
-    const tableContent = document.querySelector('.table_content')
-    tableContent.innerHTML = ''
+    // const tableContent = document.querySelector('.table_content')
+    // tableContent.innerHTML = ''
     let arrSearch = arr.filter((item) => (item[`${keySearch}`].toLowerCase()).includes((`${searchDate}`.toLowerCase()))) || []
     console.log(arrSearch)
-    searchTable(page, arrSearch) 
+    searchTable(page, arrSearch, tableContent) 
 }
 
 
@@ -229,17 +233,20 @@ function renderElement(page, arrData, arrInLocalStorage) {
     `
     render.appendChild(section)
 
+    const tableContent = document.createElement('table')
+    tableContent.classList.add('table_content')                
+
     const sortBtn = document.querySelector(`#sort_${page}_btn`)
     sortBtn.type = 'button'
     const sort = document.querySelector(`#sort_${page}`)
-    sortBtn.addEventListener('click', (() => sortArr(sort.value, arrInLocalStorage, page)))
+    sortBtn.addEventListener('click', (() => sortArr(sort.value, arrInLocalStorage, page, tableContent)))
 
     const searchBtn = document.querySelector(`#search_${page}_btn`)
     searchBtn.type = 'button'
     const search = document.querySelector(`#search_${page}`)
-    searchBtn.addEventListener('click', (() => searchArr(search.value, arrInLocalStorage, page)))
+    searchBtn.addEventListener('click', (() => searchArr(search.value, arrInLocalStorage, page, tableContent)))
 
-    searchTable(page, arrInLocalStorage)
+    searchTable(page, arrInLocalStorage, tableContent)
 
     let newContent = document.querySelector(`#new_${page}`)
     newContent.addEventListener('click', (()=> createForm(arrData, arrInLocalStorage, page)))
@@ -252,11 +259,15 @@ function renderStatistic() {
     dataSelectBookCard.sort((a, b) => {
         if (a === b) {
            book = a
+        } else {
+            book = 'not popular book' 
         }
     })
     dataSelectUserCard.sort((a, b) => {
         if (a === b) {
             user = a
+        } else {
+            user = 'not active visitor'
         }
     })
     render.innerHTML = ""
@@ -372,10 +383,8 @@ function renderBooks(book) {
 }
 
 
-function tableBook(arr) {
+function tableBook(arr, tableContent) {
     const table = document.querySelector(`.${BOOK}`)
-    const tableContent = document.createElement('table')
-    tableContent.classList.add('table_content')
     tableContent.innerHTML = `
     <thead>
         <tr>
@@ -465,10 +474,8 @@ function renderUser(user) {
 }
 
 
-function tableUser(arr) {
+function tableUser(arr, tableContent) {
     const table = document.querySelector(`.${USER}`)
-    const tableContent = document.createElement('table')
-    tableContent.classList.add('table_content')
     tableContent.innerHTML = `
     <thead>
         <tr>
@@ -567,10 +574,8 @@ function renderCard(card) {
     return tab
 }
 
-function tableCard(arr) {
+function tableCard(arr, tableContent) {
     const table = document.querySelector(`.${CARD}`)
-    const tableContent = document.createElement('table')
-    tableContent.classList.add('table_content')
     tableContent.innerHTML = `
     <thead>
         <tr>
