@@ -15,8 +15,10 @@ let arrLUsers = []
 const cardData = ['nameUser', 'nameBook', 'date']
 let arrCards = []
 
-const dataSelectBook = []
-const dataSelectUser = []
+let dataSelectBook = []
+let dataSelectUser = []
+let dataSelectBookCard = []
+let dataSelectUserCard = []
 
 function str_gen(num) {
     allStr = '123456789';
@@ -67,11 +69,21 @@ function sendInfo(arrData, arrInLocalStorage, page) {
 function collectData() {
     dataSelectBook = []
     dataSelectUser = []
+    dataSelectBookCard = []
+    dataSelectUserCard = []
+
     arrLBooks.forEach(book => {
         dataSelectBook.push(book.name)
     });
     arrLUsers.forEach(user => {
         dataSelectUser.push(user.name)
+    });
+
+    arrCards.forEach(book => {
+        dataSelectBookCard.push(book.nameBook)
+    });
+    arrCards.forEach(user => {
+        dataSelectUserCard.push(user.nameUser)
     });
 }
 
@@ -233,6 +245,29 @@ function renderElement(page, arrData, arrInLocalStorage) {
     newContent.addEventListener('click', (()=> createForm(arrData, arrInLocalStorage, page)))
 }
 
+function renderStatistic() {
+    collectData()
+    let user
+    let book
+    dataSelectBookCard.sort((a, b) => {
+        if (a === b) {
+           book = a
+        }
+    })
+    dataSelectUserCard.sort((a, b) => {
+        if (a === b) {
+            user = a
+        }
+    })
+    render.innerHTML = ""
+    let section = document.createElement('section')
+    section.classList.add('statistic')
+    section.innerHTML = `
+    <p>Active visitor: ${user}</p>
+    <p>Popular book: ${book}</p>`
+    render.appendChild(section)
+}
+
 
 const pageBook = document.querySelector('#book_btn')
 pageBook.addEventListener('click', (()=> renderElement(BOOK, bookData, arrLBooks)))
@@ -244,7 +279,7 @@ const pageCard = document.querySelector('#card_btn')
 pageCard.addEventListener('click', (()=> renderElement(CARD, cardData, arrCards)))
 
 const pageStatistic = document.querySelector('#statistic_btn')
-pageStatistic.addEventListener('click', (()=> renderElement(STATISTIC)))
+pageStatistic.addEventListener('click', (()=> renderStatistic()))
 
 
 let storageBooks = JSON.parse(localStorage.getItem('book')) || []
