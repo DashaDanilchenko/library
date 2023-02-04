@@ -112,7 +112,7 @@ function selectorCard(formCreate, nameUser='', nameBook='', date='') {
     }       
         </select>
     </label>
-    <label for="date">date:<input type="text" id="date" value=${date}></label>`
+    <label for="date">date :  <input type="text" id="date" value=${date}></label>`
 
 }
 
@@ -133,7 +133,7 @@ function createForm(arrData, arrInLocalStorage, page) {
     } else {
         formCreate.innerHTML = `${
             arrData.map((item) => {
-                return `<label for="${item}">${item}:<input type="text" id="${item}"></label>`
+                return `<label for="${item}">${item} :  <input type="text" id="${item}"></label>`
              }).join('')
         }`
     }
@@ -141,6 +141,7 @@ function createForm(arrData, arrInLocalStorage, page) {
     const sendData = document.createElement("button")
     sendData.type = "button"
     sendData.innerHTML = 'Send'
+    sendData.classList.add('send')
     formCreate.append(sendData)
     sendData.addEventListener('click', (()=> sendInfo(arrData, arrInLocalStorage, page)))
     close.addEventListener('click', (()=> deleteForm(formContainer, blockScreen)))
@@ -195,9 +196,7 @@ function searchArr(searchDate, arr, page , tableContent) {
         default:
           console.log(10);
       }
-    arr.forEach((i) => console.log(i[`${keySearch}`]))
     let arrSearch = arr.filter((item) => (item[`${keySearch}`].toLowerCase()).includes((`${searchDate}`.toLowerCase()))) || []
-    console.log(arrSearch)
     searchTable(page, arrSearch, tableContent) 
 }
 
@@ -289,28 +288,24 @@ function renderStatistic() {
     btnUserActive.classList.remove('active');
     btnCardActive.classList.remove('active');
     collectData()
-    let user
-    let book
+    let user = 'not active visitor'
+    let book = 'not popular book'
     dataSelectBookCard.sort((a, b) => {
         if (a === b) {
            book = a
-        } else {
-            book = 'not popular book' 
         }
     })
     dataSelectUserCard.sort((a, b) => {
         if (a === b) {
             user = a
-        } else {
-            user = 'not active visitor'
         }
     })
     render.innerHTML = ""
     let section = document.createElement('section')
     section.classList.add('statistic')
     section.innerHTML = `
-    <p>Active visitor: ${user}</p>
-    <p>Popular book: ${book}</p>`
+    <p><span>Active visitor</span> : ${user}</p>
+    <p><span>Popular book</span> : ${book}</p>`
     render.appendChild(section)
 }
 
@@ -334,9 +329,6 @@ let storageCard = JSON.parse(localStorage.getItem('card')) || []
 
 renderElement(BOOK, bookData, arrLBooks)
 
-console.log(localStorage)
-// localStorage.clear()
-
 
 // -------BOOK-----------
 
@@ -358,8 +350,11 @@ function editBook(book) {
 
 
 function editFormBook(book) {
+    const blockScreen = document.createElement('div')
+    blockScreen.classList.add('block_screen')
+    document.body.append(blockScreen)
     const formContainer = document.createElement('div')
-    formContainer.classList.add('formModal')
+    formContainer.classList.add('form_modal')
     document.body.append(formContainer)
     const close = document.createElement('div')
     close.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>'
@@ -368,20 +363,21 @@ function editFormBook(book) {
     formCreate.classList.add('formContext')
    
     formCreate.innerHTML = 
-        `<label for="name">name:<input type="text" id="name" value=${book.name}></label>
-        <label for="nameAuthor">nameAuthor:<input type="text" id="nameAuthor" value=${book.nameAuthor}></label>
-        <label for="year">year:<input type="text" id="year" value=${book.year}></label>
-        <label for="numPage">numPage:<input type="text" id="numPage" value=${book.numPage}></label>
-        <label for="numInLibrary">numInLibrary:<input type="text" id="numInLibrary" value=${book.numInLibrary}></label>
-        <label for="NamePublishingHouse">NamePublishingHouse:<input type="text" id="NamePublishingHouse" value=${book.NamePublishingHouse}></label>`
+        `<label for="name">name :  <input type="text" id="name" value=${book.name}></label>
+        <label for="nameAuthor">nameAuthor :  <input type="text" id="nameAuthor" value=${book.nameAuthor}></label>
+        <label for="year">year :  <input type="text" id="year" value=${book.year}></label>
+        <label for="numPage">numPage :  <input type="text" id="numPage" value=${book.numPage}></label>
+        <label for="numInLibrary">numInLibrary :  <input type="text" id="numInLibrary" value=${book.numInLibrary}></label>
+        <label for="NamePublishingHouse">NamePublishingHouse :  <input type="text" id="NamePublishingHouse" value=${book.NamePublishingHouse}></label>`
 
     formContainer.append(formCreate)
     const sendData = document.createElement("button")
     sendData.type = "button"
+    sendData.classList.add('send')
     sendData.innerHTML = 'Send'
     formCreate.append(sendData)
     sendData.addEventListener('click', (()=> editBook(book)))
-    close.addEventListener('click', (()=> deleteForm(formContainer)))
+    close.addEventListener('click', (()=> deleteForm(formContainer, blockScreen)))
 }
 
 
@@ -457,8 +453,11 @@ function editUser(user) {
 
 
 function editFormUser(user) {
+    const blockScreen = document.createElement('div')
+    blockScreen.classList.add('block_screen')
+    document.body.append(blockScreen)
     const formContainer = document.createElement('div')
-    formContainer.classList.add('formModal')
+    formContainer.classList.add('form_modal')
     document.body.append(formContainer)
     const close = document.createElement('div')
     close.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>'
@@ -467,16 +466,17 @@ function editFormUser(user) {
     formCreate.classList.add('formContext')
    
     formCreate.innerHTML = 
-        `<label for="name">name:<input type="text" id="name" value=${user.name}></label>
-        <label for="phone">phone:<input type="text" id="phone" value=${user.phone}></label>`
+        `<label for="name">name :  <input type="text" id="name" value=${user.name}></label>
+        <label for="phone">phone :  <input type="text" id="phone" value=${user.phone}></label>`
 
     formContainer.append(formCreate)
     const sendData = document.createElement("button")
     sendData.type = "button"
+    sendData.classList.add('send')
     sendData.innerHTML = 'Send'
     formCreate.append(sendData)
     sendData.addEventListener('click', (()=> editUser(user)))
-    close.addEventListener('click', (()=> deleteForm(formContainer)))
+    close.addEventListener('click', (()=> deleteForm(formContainer, blockScreen)))
 }
 
 
@@ -553,8 +553,11 @@ function returnBookInLibrary () {
 
 
 function editFormCard(card) {
+    const blockScreen = document.createElement('div')
+    blockScreen.classList.add('block_screen')
+    document.body.append(blockScreen)
     const formContainer = document.createElement('div')
-    formContainer.classList.add('formModal')
+    formContainer.classList.add('form_modal')
     document.body.append(formContainer)
     const close = document.createElement('div')
     close.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>'
@@ -565,10 +568,12 @@ function editFormCard(card) {
     formContainer.append(formCreate)
 
     const returnBook = document.createElement("button")
+    returnBook.classList.add('send')
     returnBook.type = "button"
     returnBook.innerHTML = 'The book is returned'
 
     const sendData = document.createElement("button")
+    sendData.classList.add('send')
     sendData.type = "button"
     sendData.innerHTML = 'Send'
 
@@ -577,7 +582,7 @@ function editFormCard(card) {
 
     returnBook.addEventListener('click', (()=> returnBookInLibrary()))
     sendData.addEventListener('click', (()=> editCard(card)))
-    close.addEventListener('click', (()=> deleteForm(formContainer)))
+    close.addEventListener('click', (()=> deleteForm(formContainer, blockScreen)))
 }
 
 function deleteCard(card) {

@@ -1,6 +1,83 @@
+:root { --s-background: #000000; 
+    --s-text: #d1c5b4;
+    --s-icon: #54046d;
+    --s-element: #0a0a0a;
+    --s-thead: #825896;
+    --s-line: #252525;
+    --s-button: #ca630e;}
+
 * {
     font-family: 'Roboto', sans-serif;
+    background: var(--s-background);
+    color: var(--s-text);
 }
+
+.container {
+    margin: 50px 20px;
+}
+
+h2 {
+    color: var(--s-button);
+}
+
+.menu {
+    background: var(--s-line);
+    padding-left: 20px;
+    margin: 20px 0;
+}
+
+#new_book, #new_user, #new_card,
+#sort_book_btn, #sort_user_btn, #sort_card_btn,
+#search_book_btn, #search_user_btn, #search_card_btn,
+.send
+{
+    background: var(--s-button);
+    border-radius: 10px;
+    padding: 5px 10px;
+    color: white;
+    margin-left: 10px;
+}
+
+.forms {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+hr {
+    border: none;
+    border-top: 3px solid var(--s-line);
+}
+
+table {
+    width: 100%;
+}
+
+thead{
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--s-thead);
+}
+
+td{
+    background: var(--s-element);
+    text-align: center;
+    padding: 5px;
+}
+
+i {
+    color: var(--s-icon);
+} 
+
+button, i {
+    cursor: pointer;
+}
+
+.active {
+    color: var(--s-button);
+}
+
+
 .block_screen {
     width: 100vw;
     height: 100vh;
@@ -16,25 +93,16 @@
     position: absolute;
     top: calc(50vh - 200px );
     left: calc(50vw - 200px );
-    border: 1px solid black;
     padding: 20px;
-    background: blanchedalmond;
+    background: var(--s-background);
 }
 .formContext>label {
     display: block;
     margin: 10px;
 }
 
-td{
-    border: 1px solid black;
-  }
-
-table {
-    width: 100%;
+span {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--s-thead);
 }
-
-.active {
-    color: aqua;
-}
-
-
