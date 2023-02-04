@@ -203,12 +203,39 @@ function searchArr(searchDate, arr, page , tableContent) {
 
 
 function renderElement(page, arrData, arrInLocalStorage) {
+    const btnBookActive = document.querySelector("#book_btn")
+    const btnUserActive = document.querySelector("#user_btn")
+    const btnCardActive = document.querySelector("#card_btn")
+    const btnStatisticActive = document.querySelector("#statistic_btn")
+    switch (page) {
+        case 'book':
+            btnBookActive.classList.add('active');
+            btnUserActive.classList.remove('active');
+            btnCardActive.classList.remove('active');
+            btnStatisticActive.classList.remove('active');
+          break;
+        case 'user':
+            btnUserActive.classList.add('active');
+            btnBookActive.classList.remove('active');
+            btnCardActive.classList.remove('active');
+            btnStatisticActive.classList.remove('active');
+          break;
+        case 'card':
+            btnCardActive.classList.add('active');
+            btnBookActive.classList.remove('active');
+            btnUserActive.classList.remove('active');
+            btnStatisticActive.classList.remove('active');
+          break;
+        default:
+            console.log(10);
+      }
+   
     render.innerHTML = ""
     let section = document.createElement('section')
     section.classList.add(`${page}`)
     section.innerHTML = `
         <div>
-                <span>all ${page}:</span>
+                <span>All ${page}:</span>
                 <button id="new_${page}">New ${page}</button>
             </div>
             <hr>
@@ -253,6 +280,14 @@ function renderElement(page, arrData, arrInLocalStorage) {
 }
 
 function renderStatistic() {
+    const btnBookActive = document.querySelector("#book_btn")
+    const btnUserActive = document.querySelector("#user_btn")
+    const btnCardActive = document.querySelector("#card_btn")
+    const btnStatisticActive = document.querySelector("#statistic_btn")
+    btnStatisticActive.classList.add('active')
+    btnBookActive.classList.remove('active');
+    btnUserActive.classList.remove('active');
+    btnCardActive.classList.remove('active');
     collectData()
     let user
     let book

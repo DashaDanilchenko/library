@@ -1,8 +1,5 @@
 * {
     font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    color:#333333;
 }
 .block_screen {
     width: 100vw;
@@ -34,7 +31,10 @@ td{
 
 table {
     width: 100%;
-    /* cellspacing: "0" */
+}
+
+.active {
+    color: aqua;
 }
 
 
