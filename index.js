@@ -30,8 +30,9 @@ function str_gen(num) {
     return str;
 }
 
-function deleteForm(element) {
-    element.remove()
+function deleteForm(elementForm, elementBlock) {
+    elementForm.remove()
+    elementBlock.remove()
 }
 
 function createInfo(arr) {
@@ -116,8 +117,11 @@ function selectorCard(formCreate, nameUser='', nameBook='', date='') {
 }
 
 function createForm(arrData, arrInLocalStorage, page) {
+    const blockScreen = document.createElement('div')
+    blockScreen.classList.add('block_screen')
+    document.body.append(blockScreen)
     const formContainer = document.createElement('div')
-    formContainer.classList.add('formModal')
+    formContainer.classList.add('form_modal')
     document.body.append(formContainer)
     const close = document.createElement('div')
     close.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>'
@@ -139,7 +143,7 @@ function createForm(arrData, arrInLocalStorage, page) {
     sendData.innerHTML = 'Send'
     formCreate.append(sendData)
     sendData.addEventListener('click', (()=> sendInfo(arrData, arrInLocalStorage, page)))
-    close.addEventListener('click', (()=> deleteForm(formContainer)))
+    close.addEventListener('click', (()=> deleteForm(formContainer, blockScreen)))
 }
 
 function searchTable(page, arr, tableContent) {
@@ -162,8 +166,6 @@ function searchTable(page, arr, tableContent) {
 }
 
 function sortArr(sortData, arr, page, tableContent) {
-    // const tableContent = document.querySelector('.table_content')
-    // tableContent.innerHTML = ''
     function compare (a, b) {
         if (a[`${sortData}`] > b[`${sortData}`]) {
             return 1;
@@ -194,8 +196,6 @@ function searchArr(searchDate, arr, page , tableContent) {
           console.log(10);
       }
     arr.forEach((i) => console.log(i[`${keySearch}`]))
-    // const tableContent = document.querySelector('.table_content')
-    // tableContent.innerHTML = ''
     let arrSearch = arr.filter((item) => (item[`${keySearch}`].toLowerCase()).includes((`${searchDate}`.toLowerCase()))) || []
     console.log(arrSearch)
     searchTable(page, arrSearch, tableContent) 

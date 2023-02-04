@@ -4,8 +4,16 @@
     padding: 0;
     color:#333333;
 }
+.block_screen {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    background: #333333;
+    opacity: 0.5;
+    top: 0;
+}
 
-.formModal {
+.form_modal {
     width: 400px;
     min-height: 300px;
     position: absolute;
