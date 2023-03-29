@@ -1,9 +1,7 @@
 import { BOOK, USER, CARD, bookData, userData, cardData } from "./data.js"
-import { deleteForm } from "./deleteForm.js"
 import { saveMemory} from "./saveMemory.js"
 import { renderElement } from "./renderElement.js"
 import { renderStatistic } from "./renderStatistic.js"
-import { selectorCard } from "./selectorCard.js"
 
 
 let render = document.querySelector("#render")
@@ -136,7 +134,7 @@ export function deleteCard(card) {
     renderElement(CARD, cardData, arrCards)
 }
 
-
+// -------RENDER DATA-----------
 
 
 if (storageUser) {
