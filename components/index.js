@@ -87,7 +87,7 @@ export function deleteBook(book) {
 // -------USER-----------
 
 
-function editUser(user) {
+export function editUser(user) {
     arrLUsers = arrLUsers.map((item) => {
     return item.id === user.id
     ? {...item,
@@ -101,79 +101,79 @@ function editUser(user) {
 }
 
 
-function editFormUser(user) {
-    const blockScreen = document.createElement('div')
-    blockScreen.classList.add('block_screen')
-    document.body.append(blockScreen)
-    const formContainer = document.createElement('div')
-    formContainer.classList.add('form_modal')
-    document.body.append(formContainer)
-    const close = document.createElement('div')
-    close.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>'
-    formContainer.append(close)
-    const formCreate = document.createElement('form')
-    formCreate.classList.add('formContext')
+// function editFormUser(user) {
+//     const blockScreen = document.createElement('div')
+//     blockScreen.classList.add('block_screen')
+//     document.body.append(blockScreen)
+//     const formContainer = document.createElement('div')
+//     formContainer.classList.add('form_modal')
+//     document.body.append(formContainer)
+//     const close = document.createElement('div')
+//     close.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>'
+//     formContainer.append(close)
+//     const formCreate = document.createElement('form')
+//     formCreate.classList.add('formContext')
    
-    formCreate.innerHTML = 
-        `<label for="name">name :  <input type="text" id="name" value=${user.name}></label>
-        <label for="phone">phone :  <input type="text" id="phone" value=${user.phone}></label>`
+//     formCreate.innerHTML = 
+//         `<label for="name">name :  <input type="text" id="name" value=${user.name}></label>
+//         <label for="phone">phone :  <input type="text" id="phone" value=${user.phone}></label>`
 
-    formContainer.append(formCreate)
-    const sendData = document.createElement("button")
-    sendData.type = "button"
-    sendData.classList.add('send')
-    sendData.innerHTML = 'Send'
-    formCreate.append(sendData)
-    sendData.addEventListener('click', (()=> editUser(user)))
-    close.addEventListener('click', (()=> deleteForm(formContainer, blockScreen)))
-}
+//     formContainer.append(formCreate)
+//     const sendData = document.createElement("button")
+//     sendData.type = "button"
+//     sendData.classList.add('send')
+//     sendData.innerHTML = 'Send'
+//     formCreate.append(sendData)
+//     sendData.addEventListener('click', (()=> editUser(user)))
+//     close.addEventListener('click', (()=> deleteForm(formContainer, blockScreen)))
+// }
 
 
 
-function deleteUser(user) {
+export function deleteUser(user) {
     arrLUsers = arrLUsers.filter((item) => item.id !== user.id)
     saveMemory(arrLUsers, USER)
     renderElement(USER, userData, arrLUsers)
 }
 
-function renderUser(user) {
-    const tab = document.createElement('tr')
-    tab.innerHTML = `
-        <td>${user.id}</td>
-        <td>${user.name}</td>
-        <td>${user.phone}</td>
-    `
+// export function renderUser(user) {
+//     const tab = document.createElement('tr')
+//     tab.innerHTML = `
+//         <td>${user.id}</td>
+//         <td>${user.name}</td>
+//         <td>${user.phone}</td>
+//     `
 
-    const deleteUserBtn = document.createElement('td')
-    deleteUserBtn.innerHTML = '<i class="fa-sharp fa-solid fa-trash"></i>'
-    tab.append(deleteUserBtn)
-    deleteUserBtn.addEventListener('click', () => deleteUser(user))
+//     const deleteUserBtn = document.createElement('td')
+//     deleteUserBtn.innerHTML = '<i class="fa-sharp fa-solid fa-trash"></i>'
+//     tab.append(deleteUserBtn)
+//     deleteUserBtn.addEventListener('click', () => deleteUser(user))
 
-    const editUserBtn = document.createElement('td')
-    editUserBtn.innerHTML = '<i class="fa-sharp fa-solid fa-pen-to-square"></i>'
-    tab.append(editUserBtn)
-    editUserBtn.addEventListener('click', () => editFormUser(user))
+//     const editUserBtn = document.createElement('td')
+//     editUserBtn.innerHTML = '<i class="fa-sharp fa-solid fa-pen-to-square"></i>'
+//     tab.append(editUserBtn)
+//     editUserBtn.addEventListener('click', () => editFormUser(user))
 
-    return tab
-}
+//     return tab
+// }
 
 
-export function tableUser(arr, tableContent) {
-    const table = document.querySelector(`.${USER}`)
-    tableContent.innerHTML = `
-    <thead>
-        <tr>
-        <td>ID</td>
-        <td>Name</td>
-        <td>Phone</td>
-        <td>Delete</td>
-        <td>Edit</td>
-        </tr>
-    </thead>`
-    table.append(tableContent)
-    const users = arr.map(renderUser)
-    tableContent.append(...users)
-}
+// export function tableUser(arr, tableContent) {
+//     const table = document.querySelector(`.${USER}`)
+//     tableContent.innerHTML = `
+//     <thead>
+//         <tr>
+//         <td>ID</td>
+//         <td>Name</td>
+//         <td>Phone</td>
+//         <td>Delete</td>
+//         <td>Edit</td>
+//         </tr>
+//     </thead>`
+//     table.append(tableContent)
+//     const users = arr.map(renderUser)
+//     tableContent.append(...users)
+// }
 
 // -------CARD-----------
 

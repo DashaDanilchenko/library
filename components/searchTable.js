@@ -1,5 +1,6 @@
-import { tableCard, tableUser } from "./index.js";
+import { tableCard } from "./index.js";
 import { tableBook } from "./book/tableBook.js";
+import { tableUser } from "./user/tableUser.js";
 
 export function searchTable(page, arr, tableContent) {
     if (tableContent) {
