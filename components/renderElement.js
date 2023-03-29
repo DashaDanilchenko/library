@@ -36,7 +36,7 @@ export function renderElement(page, arrData, arrInLocalStorage) {
     section.classList.add(`${page}`)
     section.innerHTML = `
         <div>
-                <span>All ${page}:</span>
+                <span>All ${page}</span>
                 <button id="new_${page}">New ${page}</button>
             </div>
             <hr>

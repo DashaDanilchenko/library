@@ -26,7 +26,7 @@ export function renderStatistic() {
     let section = document.createElement('section')
     section.classList.add('statistic')
     section.innerHTML = `
-    <p><span>Active visitor</span> : ${user}</p>
-    <p><span>Popular book</span> : ${book}</p>`
+    <p><span>Active visitor :</span> ${user}</p>
+    <p><span>Popular book :</span> ${book}</p>`
     render.appendChild(section)
 }
