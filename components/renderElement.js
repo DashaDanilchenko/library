@@ -1,4 +1,7 @@
-import { sortArr, searchArr, createForm, searchTable } from "./index.js"
+import { createForm } from "./createForm.js"
+import { searchTable } from "./searchTable.js"
+import { sortArr } from "./sortArr.js"
+import { searchArr } from "./searchArr.js"
 
 export function renderElement(page, arrData, arrInLocalStorage) {
     const btnBookActive = document.querySelector("#book_btn")

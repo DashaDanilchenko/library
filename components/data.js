@@ -6,8 +6,3 @@ export const STATISTIC = 'statistics'
 export const bookData = ['name', 'nameAuthor', 'year', 'numPage', 'numInLibrary', 'NamePublishingHouse']
 export const userData = ['name', 'phone']
 export const cardData = ['nameUser', 'nameBook', 'date']
-
-
-// export let arrLBooks = []
-// export let arrLUsers = []
-// export let arrCards = []

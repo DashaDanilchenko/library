@@ -1,11 +1,9 @@
 import { BOOK, USER, CARD, bookData, userData, cardData } from "./data.js"
 import { deleteForm } from "./deleteForm.js"
 import { saveMemory} from "./saveMemory.js"
-import { sendInfo } from "./sendInfo.js"
 import { renderElement } from "./renderElement.js"
 import { renderStatistic } from "./renderStatistic.js"
 import { selectorCard } from "./selectorCard.js"
-
 
 
 let render = document.querySelector("#render")
@@ -41,91 +39,6 @@ export function collectData() {
 }
 
 
-export function createForm(arrData, arrInLocalStorage, page) {
-    const blockScreen = document.createElement('div')
-    blockScreen.classList.add('block_screen')
-    document.body.append(blockScreen)
-    const formContainer = document.createElement('div')
-    formContainer.classList.add('form_modal')
-    document.body.append(formContainer)
-    const close = document.createElement('div')
-    close.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>'
-    formContainer.append(close)
-    const formCreate = document.createElement('form')
-    formCreate.classList.add('formContext')
-    if (page === 'card') {
-        selectorCard(formCreate)
-    } else {
-        formCreate.innerHTML = `${
-            arrData.map((item) => {
-                return `<label for="${item}">${item} :  <input type="text" id="${item}"></label>`
-             }).join('')
-        }`
-    }
-    formContainer.append(formCreate)
-    const sendData = document.createElement("button")
-    sendData.type = "button"
-    sendData.innerHTML = 'Send'
-    sendData.classList.add('send')
-    formCreate.append(sendData)
-    sendData.addEventListener('click', (()=> sendInfo(arrData, arrInLocalStorage, page)))
-    close.addEventListener('click', (()=> deleteForm(formContainer, blockScreen)))
-}
-
-export function searchTable(page, arr, tableContent) {
-    if (tableContent) {
-        tableContent.innerHTML = ''
-    }
-    switch (page) {
-        case 'book':
-          tableBook(arr, tableContent)
-          break;
-        case 'user':
-          tableUser(arr, tableContent);
-          break;
-        case 'card':
-          tableCard(arr, tableContent);
-          break;
-        default:
-          console.log(10);
-      }
-}
-
-export function sortArr(sortData, arr, page, tableContent) {
-    function compare (a, b) {
-        if (a[`${sortData}`] > b[`${sortData}`]) {
-            return 1;
-          }
-          if (a[`${sortData}`] < b[`${sortData}`]) {
-            return -1;
-          }
-            return 0;
-      }
-    arr.sort(compare) 
-
-    searchTable(page, arr, tableContent)
-}
-
-export function searchArr(searchDate, arr, page , tableContent) {
-    let keySearch
-    switch (page) {
-        case 'book':
-            keySearch = 'name';
-          break;
-        case 'user':
-            keySearch = 'name';
-          break;
-        case 'card':
-            keySearch = 'nameUser';
-          break;
-        default:
-          console.log(10);
-      }
-    let arrSearch = arr.filter((item) => (item[`${keySearch}`].toLowerCase()).includes((`${searchDate}`.toLowerCase()))) || []
-    searchTable(page, arrSearch, tableContent) 
-}
-
-
 const pageBook = document.querySelector('#book_btn')
 pageBook.addEventListener('click', (()=> renderElement(BOOK, bookData, arrLBooks)))
 
@@ -148,7 +61,7 @@ renderElement(BOOK, bookData, arrLBooks)
 
 // -------BOOK-----------
 
-function editBook(book) {
+export function editBook(book) {
     arrLBooks = arrLBooks.map((item) => {
     return item.id === book.id
     ? {...item,
@@ -165,90 +78,10 @@ function editBook(book) {
 }
 
 
-function editFormBook(book) {
-    const blockScreen = document.createElement('div')
-    blockScreen.classList.add('block_screen')
-    document.body.append(blockScreen)
-    const formContainer = document.createElement('div')
-    formContainer.classList.add('form_modal')
-    document.body.append(formContainer)
-    const close = document.createElement('div')
-    close.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>'
-    formContainer.append(close)
-    const formCreate = document.createElement('form')
-    formCreate.classList.add('formContext')
-   
-    formCreate.innerHTML = 
-        `<label for="name">name :  <input type="text" id="name" value=${book.name}></label>
-        <label for="nameAuthor">nameAuthor :  <input type="text" id="nameAuthor" value=${book.nameAuthor}></label>
-        <label for="year">year :  <input type="text" id="year" value=${book.year}></label>
-        <label for="numPage">numPage :  <input type="text" id="numPage" value=${book.numPage}></label>
-        <label for="numInLibrary">numInLibrary :  <input type="text" id="numInLibrary" value=${book.numInLibrary}></label>
-        <label for="NamePublishingHouse">NamePublishingHouse :  <input type="text" id="NamePublishingHouse" value=${book.NamePublishingHouse}></label>`
-
-    formContainer.append(formCreate)
-    const sendData = document.createElement("button")
-    sendData.type = "button"
-    sendData.classList.add('send')
-    sendData.innerHTML = 'Send'
-    formCreate.append(sendData)
-    sendData.addEventListener('click', (()=> editBook(book)))
-    close.addEventListener('click', (()=> deleteForm(formContainer, blockScreen)))
-}
-
-
-function deleteBook(book) {
+export function deleteBook(book) {
     arrLBooks = arrLBooks.filter((item) => item.id !== book.id)
     saveMemory(arrLBooks, BOOK)
     renderElement(BOOK, bookData, arrLBooks)
-}
-
-
-function renderBooks(book) {
-    const tab = document.createElement('tr')
-    tab.innerHTML = `
-            <td>${book.id}</td>
-            <td>${book.name}</td>
-            <td>${book.nameAuthor}</td>
-            <td>${book.year}</td>
-            <td>${book.numPage}</td>
-            <td>${book.numInLibrary}</td>
-            <td>${book.NamePublishingHouse}</td>
-    `
-
-    const deleteBookBtn = document.createElement('td')
-    deleteBookBtn.innerHTML = '<i class="fa-sharp fa-solid fa-trash"></i>'
-    tab.append(deleteBookBtn)
-    deleteBookBtn.addEventListener('click', () => deleteBook(book))
-
-    const editBookBtn = document.createElement('td')
-    editBookBtn.innerHTML = '<i class="fa-sharp fa-solid fa-pen-to-square"></i>'
-    tab.append(editBookBtn)
-    editBookBtn.addEventListener('click', () => editFormBook(book))
-
-    return tab
-}
-
-
-function tableBook(arr, tableContent) {
-    const table = document.querySelector(`.${BOOK}`)
-    tableContent.innerHTML = `
-    <thead>
-        <tr>
-        <td>ID</td>
-        <td>Name</td>
-        <td>Name author</td>
-        <td>Year publication</td>
-        <td>Name publishing house</td>
-        <td>Number pages</td>
-        <td>Number in the library</td>
-        <td>Delete</td>
-        <td>Edit</td>
-        </tr>
-    </thead> `
-    table.append(tableContent)
-    const books = arr.map(renderBooks)
-    tableContent.append(...books)
 }
 
 // -------USER-----------
@@ -325,7 +158,7 @@ function renderUser(user) {
 }
 
 
-function tableUser(arr, tableContent) {
+export function tableUser(arr, tableContent) {
     const table = document.querySelector(`.${USER}`)
     tableContent.innerHTML = `
     <thead>
@@ -430,7 +263,7 @@ function renderCard(card) {
     return tab
 }
 
-function tableCard(arr, tableContent) {
+export function tableCard(arr, tableContent) {
     const table = document.querySelector(`.${CARD}`)
     tableContent.innerHTML = `
     <thead>
