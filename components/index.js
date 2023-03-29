@@ -1,73 +1,25 @@
+import { BOOK, USER, CARD, bookData, userData, cardData } from "./data.js"
+import { deleteForm } from "./deleteForm.js"
+import { saveMemory} from "./saveMemory.js"
+import { sendInfo } from "./sendInfo.js"
+import { renderElement } from "./renderElement.js"
+import { renderStatistic } from "./renderStatistic.js"
+import { selectorCard } from "./selectorCard.js"
+
+
 
 let render = document.querySelector("#render")
 
-const BOOK = 'book'
-const USER = 'user'
-const CARD = 'card'
-const STATISTIC = 'statistics'
+export let arrLBooks = []
+export let arrLUsers = []
+export let arrCards = []
 
-const bookData = ['name', 'nameAuthor', 'year', 'numPage', 'numInLibrary', 'NamePublishingHouse']
-let arrLBooks = []
+export let dataSelectBook = []
+export let dataSelectUser = []
+export let dataSelectBookCard = []
+export let dataSelectUserCard = []
 
-const userData = ['name', 'phone']
-let arrLUsers = []
-
-const cardData = ['nameUser', 'nameBook', 'date']
-let arrCards = []
-
-let dataSelectBook = []
-let dataSelectUser = []
-let dataSelectBookCard = []
-let dataSelectUserCard = []
-
-function str_gen(num) {
-    allStr = '123456789';
-    let str = '';
-    for (let i = 0; i < num; i++) {
-        let pos = Math.floor(Math.random() * allStr.length);
-        str += allStr.substring(pos,pos+1);
-    }
-    return str;
-}
-
-function deleteForm(elementForm, elementBlock) {
-    elementForm.remove()
-    elementBlock.remove()
-}
-
-function createInfo(arr) {
-    let obj = {}
-    obj.id = str_gen(5)
-    arr.map((i) => {
-        obj[`${i}`]= document.querySelector(`#${i}`).value
-    })
-    return obj
-}
-
-function saveMemory(arrInLocalStorage, page) {
-    localStorage.setItem(`${page}`, JSON.stringify(arrInLocalStorage))
-}
-
-function sendInfo(arrData, arrInLocalStorage, page) {
-    let objectInfo = createInfo(arrData)
-    arrInLocalStorage.push(objectInfo)
-    saveMemory(arrInLocalStorage, page)
-    switch (page) {
-        case 'book':
-            renderElement(BOOK, bookData, arrLBooks);
-          break;
-        case 'user':
-            renderElement(USER, userData, arrLUsers);
-          break;
-        case 'card':
-            renderElement(CARD, cardData, arrCards);
-          break;
-        default:
-          console.log(10);
-      }
-}
-
-function collectData() {
+export function collectData() {
     dataSelectBook = []
     dataSelectUser = []
     dataSelectBookCard = []
@@ -89,34 +41,7 @@ function collectData() {
 }
 
 
-function selectorCard(formCreate, nameUser='', nameBook='', date='') {
-    collectData()
-    return formCreate.innerHTML = 
-    `<label for="nameUser">nameUser: <select id="nameUser">
-    ${       
-        dataSelectUser.map((item) => {
-            return item === nameUser
-            ?`<option selected=“selected”>${item}</option>`
-            :`<option>${item}</option>`
-         }).join('')
-    }       
-        </select>
-    </label>
-    <label for="nameBook">nameBook: <select id="nameBook">
-    ${       
-        dataSelectBook.map((item) => {
-            return item === nameBook
-            ?`<option selected=“selected”>${item}</option>`
-            :`<option>${item}</option>`
-         }).join('')
-    }       
-        </select>
-    </label>
-    <label for="date">date :  <input type="text" id="date" value=${date}></label>`
-
-}
-
-function createForm(arrData, arrInLocalStorage, page) {
+export function createForm(arrData, arrInLocalStorage, page) {
     const blockScreen = document.createElement('div')
     blockScreen.classList.add('block_screen')
     document.body.append(blockScreen)
@@ -147,7 +72,7 @@ function createForm(arrData, arrInLocalStorage, page) {
     close.addEventListener('click', (()=> deleteForm(formContainer, blockScreen)))
 }
 
-function searchTable(page, arr, tableContent) {
+export function searchTable(page, arr, tableContent) {
     if (tableContent) {
         tableContent.innerHTML = ''
     }
@@ -166,7 +91,7 @@ function searchTable(page, arr, tableContent) {
       }
 }
 
-function sortArr(sortData, arr, page, tableContent) {
+export function sortArr(sortData, arr, page, tableContent) {
     function compare (a, b) {
         if (a[`${sortData}`] > b[`${sortData}`]) {
             return 1;
@@ -181,7 +106,7 @@ function sortArr(sortData, arr, page, tableContent) {
     searchTable(page, arr, tableContent)
 }
 
-function searchArr(searchDate, arr, page , tableContent) {
+export function searchArr(searchDate, arr, page , tableContent) {
     let keySearch
     switch (page) {
         case 'book':
@@ -198,115 +123,6 @@ function searchArr(searchDate, arr, page , tableContent) {
       }
     let arrSearch = arr.filter((item) => (item[`${keySearch}`].toLowerCase()).includes((`${searchDate}`.toLowerCase()))) || []
     searchTable(page, arrSearch, tableContent) 
-}
-
-
-function renderElement(page, arrData, arrInLocalStorage) {
-    const btnBookActive = document.querySelector("#book_btn")
-    const btnUserActive = document.querySelector("#user_btn")
-    const btnCardActive = document.querySelector("#card_btn")
-    const btnStatisticActive = document.querySelector("#statistic_btn")
-    switch (page) {
-        case 'book':
-            btnBookActive.classList.add('active');
-            btnUserActive.classList.remove('active');
-            btnCardActive.classList.remove('active');
-            btnStatisticActive.classList.remove('active');
-          break;
-        case 'user':
-            btnUserActive.classList.add('active');
-            btnBookActive.classList.remove('active');
-            btnCardActive.classList.remove('active');
-            btnStatisticActive.classList.remove('active');
-          break;
-        case 'card':
-            btnCardActive.classList.add('active');
-            btnBookActive.classList.remove('active');
-            btnUserActive.classList.remove('active');
-            btnStatisticActive.classList.remove('active');
-          break;
-        default:
-            console.log(10);
-      }
-   
-    render.innerHTML = ""
-    let section = document.createElement('section')
-    section.classList.add(`${page}`)
-    section.innerHTML = `
-        <div>
-                <span>All ${page}:</span>
-                <button id="new_${page}">New ${page}</button>
-            </div>
-            <hr>
-            <div class="forms">
-                <form>
-                    <label for="sort_${page}"><select id="sort_${page}">
-                    <option></option>   
-                    <option>id</option>
-                    ${       
-                        arrData.map((item) => {   
-                           return `<option>${item}</option>`
-                         })
-                    }  
-                    </select></label>
-                    <button id="sort_${page}_btn">Sort</button>
-                </form>
-                <form>
-                <label for="search_${page}"><input type="text" id="search_${page}"></label>
-                <button id="search_${page}_btn">Search</button>
-            </form>
-            </div>
-    `
-    render.appendChild(section)
-
-    const tableContent = document.createElement('table')
-    tableContent.classList.add('table_content')                
-
-    const sortBtn = document.querySelector(`#sort_${page}_btn`)
-    sortBtn.type = 'button'
-    const sort = document.querySelector(`#sort_${page}`)
-    sortBtn.addEventListener('click', (() => sortArr(sort.value, arrInLocalStorage, page, tableContent)))
-
-    const searchBtn = document.querySelector(`#search_${page}_btn`)
-    searchBtn.type = 'button'
-    const search = document.querySelector(`#search_${page}`)
-    searchBtn.addEventListener('click', (() => searchArr(search.value, arrInLocalStorage, page, tableContent)))
-
-    searchTable(page, arrInLocalStorage, tableContent)
-
-    let newContent = document.querySelector(`#new_${page}`)
-    newContent.addEventListener('click', (()=> createForm(arrData, arrInLocalStorage, page)))
-}
-
-function renderStatistic() {
-    const btnBookActive = document.querySelector("#book_btn")
-    const btnUserActive = document.querySelector("#user_btn")
-    const btnCardActive = document.querySelector("#card_btn")
-    const btnStatisticActive = document.querySelector("#statistic_btn")
-    btnStatisticActive.classList.add('active')
-    btnBookActive.classList.remove('active');
-    btnUserActive.classList.remove('active');
-    btnCardActive.classList.remove('active');
-    collectData()
-    let user = 'not active visitor'
-    let book = 'not popular book'
-    dataSelectBookCard.sort((a, b) => {
-        if (a === b) {
-           book = a
-        }
-    })
-    dataSelectUserCard.sort((a, b) => {
-        if (a === b) {
-            user = a
-        }
-    })
-    render.innerHTML = ""
-    let section = document.createElement('section')
-    section.classList.add('statistic')
-    section.innerHTML = `
-    <p><span>Active visitor</span> : ${user}</p>
-    <p><span>Popular book</span> : ${book}</p>`
-    render.appendChild(section)
 }
 
 
